@@ -1,3 +1,3 @@
 Veterinaria Oasis
 
-INTEGRANTES: Brian Ocampos, Thomas Echeverria, Mateo Pane.
+INTEGRANTES: Brian Ocampos, Thomas Echeverria, Mateo Pane..-

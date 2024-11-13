@@ -1,58 +1,54 @@
-import { Cliente } from './Interface';
-class Veterinaria {
-    private clientes: Cliente[] = [];
-    private idCounter: number = 1;
+import { Mascota } from "./Mascota";
 
-    // Función para agregar un nuevo cliente
-    agregarCliente(nombre: string, telefono: string): Cliente {
-        const nuevoCliente: Cliente = {
-            id: this.idCounter++,
-            nombre,
-            telefono,
-            esVIP: false,
-            visitas: 0,
-        };
-        this.clientes.push(nuevoCliente);
-        return nuevoCliente;
+export class Veterinaria {
+  public mascotas: Mascota[] = [];
+
+  public alta(mascotas: Mascota): void {
+    this.mascotas.push(mascotas);
+    console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
+  }
+
+  public baja(id: number): void {
+    let index = -1;
+    for (let i = 0; i < this.mascotas.length; i++) {
+      if (this.mascotas[i].id === id) {
+        index = i;
+        break;
+      }
     }
 
-    // Función para eliminar un cliente por ID
-    eliminarCliente(id: number): boolean {
-        const index = this.clientes.findIndex(cliente => cliente.id === id);
-        if (index !== -1) {
-            this.clientes.splice(index, 1);
-            return true;
-        }
-        return false;
+    if (index !== -1) {
+      const mascotaEliminada = this.mascotas.splice(index, 1)[0];
+      console.log(`Mascota eliminada: ${mascotaEliminada.datosAnimal()}`);
+    } else {
+      console.log("Mascota no encontrada para eliminar");
     }
+  }
 
-    // Función para modificar datos de un cliente
-    modificarCliente(id: number, nombre?: string, telefono?: string): boolean {
-        const cliente = this.clientes.find(cliente => cliente.id === id);
-        if (cliente) {
-            if (nombre) cliente.nombre = nombre;
-            if (telefono) cliente.telefono = telefono;
-            return true;
-        }
-        return false;
+  public modificarMasc(
+    id: number,
+    idDuenioNuevo: number,
+    nombreNuevo: string,
+    especieNuevo: string
+  ): void {
+    let mascotaAModificar: Mascota | undefined;
+    this.mascotas.forEach((mascota) => {
+      if (mascota.id === id) {
+        mascotaAModificar = mascota;
+      }
+    });
+    if (mascotaAModificar) {
+      mascotaAModificar.idDuenio = idDuenioNuevo;
+      mascotaAModificar.nombre = nombreNuevo;
+      mascotaAModificar.especie = especieNuevo;
+      console.log(`Mascota modificada: ${mascotaAModificar.datosAnimal()}`);
+    } else {
+      console.log("No se encontro la mascota");
     }
+  }
 
-    // Función para registrar una visita y actualizar el estado VIP
-    registrarVisita(id: number): boolean {
-        const cliente = this.clientes.find(cliente => cliente.id === id);
-        if (cliente) {
-            cliente.visitas += 1;
-            if (cliente.visitas >= 5) {
-                cliente.esVIP = true;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    // Función para listar todos los clientes
-    listarClientes(): Cliente[] {
-        return this.clientes;
-    }
+  public listMasc(): void {
+    console.log("Listado de mascotas:");
+    this.mascotas.forEach((mascota) => console.log(mascota.datosAnimal()));
+  }
 }
-export { Veterinaria };

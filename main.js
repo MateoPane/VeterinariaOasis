@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Mascota_1 = require("./Mascota");
+var Veterinaria_1 = require("./Veterinaria");
+var veterinaria = new Veterinaria_1.Veterinaria();
+var mascota = new Mascota_1.Mascota(1, 1, "Morea", "Perro");
+var mascota2 = new Mascota_1.Mascota(2, 2, "Tommy", "Lagarto");
+var mascota3 = new Mascota_1.Mascota(3, 3, "Pepo", "Gato");
+veterinaria.alta(mascota);
+veterinaria.alta(mascota2);
+veterinaria.alta(mascota3);
+veterinaria.listMasc();
+veterinaria.baja(2);
+veterinaria.modificarMasc(1, 5, "Uma", "Perro");
+veterinaria.listMasc();
