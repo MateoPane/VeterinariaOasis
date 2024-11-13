@@ -1,24 +1,10 @@
-import { Veterinaria } from './Veterinaria';
+import { RedClientes } from "./Veterinaria";
 
+const miRedClientes = new RedClientes();
+const cliente1 = miRedClientes.agregarCliente('Juan Pérez', '123456789'); 
+const cliente2 = miRedClientes.agregarCliente('María Gómez', '987654321');
 
-const miVeterinaria = new Veterinaria();
+for (let i = 0; i < 6; i++) { miRedClientes.registrarVisita(cliente1.id); }
 
-// Agregar clientes
-const cliente1 = miVeterinaria.agregarCliente('Juan Pérez', '123456789');
-const cliente2 = miVeterinaria.agregarCliente('María Gómez', '987654321');
-
-// Registrar visitas
-miVeterinaria.registrarVisita(cliente1.id);
-miVeterinaria.registrarVisita(cliente1.id);
-miVeterinaria.registrarVisita(cliente1.id);
-miVeterinaria.registrarVisita(cliente1.id);
-miVeterinaria.registrarVisita(cliente1.id); // Juan debería ser VIP ahora
-
-// Modificar cliente
-miVeterinaria.modificarCliente(cliente2.id, 'María López', '111222333');
-
-// Eliminar cliente
-miVeterinaria.eliminarCliente(cliente1.id);
-
-// Listar clientes
-console.log(miVeterinaria.listarClientes());
+miRedClientes.modificarCliente(cliente1.id, 'Juan López', '111222333');
+console.log(miRedClientes.listarClientes());
