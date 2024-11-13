@@ -14,7 +14,7 @@ VeterinariaProveedores.alta(proveedor3);
 VeterinariaProveedores.listaProv();
 VeterinariaProveedores.baja(2);
 VeterinariaProveedores.modificarProveedor(
-  "Distribuidora mejorada",
+  "Distribuidora mejoradaa",
   1,
   2284444444
 );
