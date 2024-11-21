@@ -4,6 +4,23 @@ export class Veterinaria {
   public mascotas: Mascota[] = [];
 
   public alta(mascotas: Mascota): void {
+    const idExistente = this.mascotas.find(
+      (mascota) => mascota.id === mascotas.id
+    );
+    const idDuenioExistente = this.mascotas.find(
+      (mascota) => mascota.idDuenio === mascotas.idDuenio
+    );
+
+    if (idExistente) {
+      console.log(`Ya existe una Mascota con este id ${mascotas.id}`);
+      return;
+    } else if (idDuenioExistente) {
+      console.log(
+        `El Dueño con Id ${mascotas.idDuenio} ya tiene una mascota registrada.`
+      );
+      return;
+    }
+
     this.mascotas.push(mascotas);
     console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
   }

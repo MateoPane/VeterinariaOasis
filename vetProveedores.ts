@@ -3,9 +3,20 @@ import { proveedor } from "./proveedor";
 export class vetProveedores {
   public proveedores: proveedor[] = [];
 
-  public alta(proveedores: proveedor): void {
-    this.proveedores.push(proveedores);
-    console.log(`Proveedor agregado: ${proveedores.obtenerInformacion()}`);
+  private generarId(): number {
+    let id = Math.floor(Math.random() * 9000) + 1000;
+    // Verifica si el ID ya existe en la lista de proveedores
+    while (this.proveedores.find((proveedor) => proveedor.id === id)) {
+      id = Math.floor(Math.random() * 9000) + 1000; // Genera un nuevo ID si ya existe
+    }
+    return id;
+  }
+
+  public alta(proveedor: proveedor): void {
+    const id = this.generarId(); // Genera un ID único aleatorio
+    proveedor.id = id;
+    this.proveedores.push();
+    console.log(`Proveedor agregado: ${proveedor.obtenerInformacion()}`);
   }
 
   public baja(id: number): void {

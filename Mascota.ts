@@ -13,7 +13,7 @@ export class Mascota {
 
   public especieExotica(especie: string): string {
     if (especie.toLowerCase() !== "perro" && especie.toLowerCase() !== "gato") {
-      return "exotica.";
+      return "exotica";
     }
     return especie;
   }

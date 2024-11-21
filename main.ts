@@ -1,19 +1,282 @@
-import { Mascota } from "./Mascota";
+import * as readlineSync from "readline-sync";
 import { Veterinaria } from "./Veterinaria";
+import { vetProveedores } from "./vetProveedores";
+import { proveedor } from "./proveedor";
+import { Mascota } from "./Mascota";
+import { RedClientes } from "./RedClientes";
+import { Sucursales } from "./Sucursales";
 
-const veterinaria = new Veterinaria();
+const miVeterinaria = new Veterinaria();
+const miRedClientes = new RedClientes();
+const miVetProveedores = new vetProveedores();
+const miSucursales = new Sucursales();
 
-const mascota = new Mascota(1, 1, "Morea", "Perro");
-const mascota2 = new Mascota(2, 2, "Tommy", "Lagarto");
-const mascota3 = new Mascota(3, 3, "Pepo", "Gato");
+function mostrarMenu(): void {
+  console.log(`
+  === SISTEMA DE GESTIÓN ===
+  1. Gestión de Mascotas
+  2. Gestión de Proveedores
+  3. Gestión de Clientes
+  4. Gestión de Sucursales
+  5. Salir
+  `);
+}
 
-veterinaria.alta(mascota);
-veterinaria.alta(mascota2);
-veterinaria.alta(mascota3);
+function gestionClientes(): void {
+  let opcion: number;
+  do {
+    console.log(`
+      === GESTIÓN DE CLIENTES ===
+      1. Agregar Cliente
+      2. Modificar Cliente
+      3. Eliminar Cliente
+      4. Registrar Visita
+      5. Listar Clientes
+      6. Volver al Menú Principal
+      `);
 
-veterinaria.listMasc();
+    opcion = readlineSync.questionInt("Seleccione una opción: ");
 
-veterinaria.baja(2);
-veterinaria.modificarMasc(1, 5, "Uma", "Perro");
+    switch (opcion) {
+      case 1: {
+        const nombre = readlineSync.question("Nombre del cliente: ");
+        const telefono = readlineSync.question("Teléfono del cliente: ");
+        const nuevoCliente = miRedClientes.agregarCliente(nombre, telefono);
+        console.log(`Cliente agregado: ${JSON.stringify(nuevoCliente)}`);
+        break;
+      }
+      case 2: {
+        const id = readlineSync.questionInt("ID del cliente a modificar: ");
+        const nuevoNombre = readlineSync.question(
+          "Nuevo nombre (deje vacío para no modificar): "
+        );
+        const nuevoTelefono = readlineSync.question(
+          "Nuevo teléfono (deje vacío para no modificar): "
+        );
+        const modificado = miRedClientes.modificarCliente(
+          id,
+          nuevoNombre || undefined,
+          nuevoTelefono || undefined
+        );
+        if (modificado) {
+          console.log("Cliente modificado exitosamente.");
+        } else {
+          console.log("Cliente no encontrado.");
+        }
+        break;
+      }
+      case 3: {
+        const id = readlineSync.questionInt("ID del cliente a eliminar: ");
+        const eliminado = miRedClientes.eliminarCliente(id);
+        if (eliminado) {
+          console.log("Cliente eliminado exitosamente.");
+        } else {
+          console.log("Cliente no encontrado.");
+        }
+        break;
+      }
+      case 4: {
+        const id = readlineSync.questionInt(
+          "ID del cliente para registrar visita: "
+        );
+        const visitaRegistrada = miRedClientes.registrarVisita(id);
+        if (visitaRegistrada) {
+          console.log("Visita registrada exitosamente.");
+        } else {
+          console.log("Cliente no encontrado.");
+        }
+        break;
+      }
+      case 5:
+        console.log("Listado de clientes:");
+        const clientes = miRedClientes.listarClientes();
+        clientes.forEach((cliente) => {
+          console.log(
+            `ID: ${cliente.id}, Nombre: ${cliente.nombre}, Teléfono: ${cliente.telefono}, VIP: ${cliente.esVIP}, Visitas: ${cliente.visitas}`
+          );
+        });
+        break;
+      case 6:
+        console.log("Volviendo al menú principal...");
+        break;
+      default:
+        console.log("Opción inválida.");
+    }
+  } while (opcion !== 6);
+}
 
-veterinaria.listMasc();
+function gestionMascotas(): void {
+  let opcion: number;
+  do {
+    console.log(`
+    === GESTIÓN DE MASCOTAS ===
+    1. Agregar Mascota
+    2. Modificar Mascota
+    3. Eliminar Mascota
+    4. Listar Mascotas
+    5. Volver al Menú Principal
+    `);
+
+    opcion = readlineSync.questionInt("Seleccione una opción: ");
+
+    switch (opcion) {
+      case 1: {
+        const id = readlineSync.questionInt("ID de la mascota: ");
+        const idDuenio = readlineSync.questionInt("ID del dueño: ");
+        const nombre = readlineSync.question("Nombre de la mascota: ");
+        const especie = readlineSync.question("Especie de la mascota: ");
+        miVeterinaria.alta(new Mascota(id, idDuenio, nombre, especie));
+        break;
+      }
+      case 2: {
+        const id = readlineSync.questionInt("ID de la mascota a modificar: ");
+        const idDuenio = readlineSync.questionInt("Nuevo ID del dueño: ");
+        const nombre = readlineSync.question("Nuevo nombre: ");
+        const especie = readlineSync.question("Nueva especie: ");
+        miVeterinaria.modificarMasc(id, idDuenio, nombre, especie);
+        break;
+      }
+      case 3: {
+        const id = readlineSync.questionInt("ID de la mascota a eliminar: ");
+        miVeterinaria.baja(id);
+        break;
+      }
+      case 4:
+        miVeterinaria.listMasc();
+        break;
+      case 5:
+        console.log("Volviendo al menú principal...");
+        break;
+      default:
+        console.log("Opción inválida.");
+    }
+  } while (opcion !== 5);
+}
+
+function gestionProveedores(): void {
+  let opcion: number;
+  do {
+    console.log(`
+    === GESTIÓN DE PROVEEDORES ===
+    1. Agregar Proveedor
+    2. Modificar Proveedor
+    3. Eliminar Proveedor
+    4. Listar Proveedores
+    5. Volver al Menú Principal
+    `);
+
+    opcion = readlineSync.questionInt("Seleccione una opción: ");
+
+    switch (opcion) {
+      case 1: {
+        const id = readlineSync.questionInt("ID del proveedor: ");
+        const nombre = readlineSync.question("Nombre del proveedor: ");
+        const telefono = readlineSync.questionInt("Teléfono del proveedor: ");
+        miVetProveedores.alta(new proveedor(nombre, id, telefono));
+        break;
+      }
+      case 2: {
+        const id = readlineSync.questionInt("ID del proveedor a modificar: ");
+        const nombre = readlineSync.question("Nuevo nombre: ");
+        const telefono = readlineSync.questionInt("Nuevo teléfono: ");
+        miVetProveedores.modificarProveedor(nombre, id, telefono);
+        break;
+      }
+      case 3: {
+        const id = readlineSync.questionInt("ID del proveedor a eliminar: ");
+        miVetProveedores.baja(id);
+        break;
+      }
+      case 4:
+        miVetProveedores.listaProv();
+        break;
+      case 5:
+        console.log("Volviendo al menú principal...");
+        break;
+      default:
+        console.log("Opción inválida.");
+    }
+  } while (opcion !== 5);
+}
+
+function gestionSucursales(): void {
+  let opcion: number;
+  do {
+    console.log(`
+            === GESTIÓN DE SUCURSALES ===
+            1. Agregar Sucursal
+            2. Modificar Sucursal
+            3. Eliminar Sucursal
+            4. Listar Sucursales
+            5. Volver al Menú Principal
+            `);
+    opcion = readlineSync.questionInt("Seleccione una opción: ");
+    switch (opcion) {
+      case 1:
+        const nombre = readlineSync.question("Nombre de la Sucursal: ");
+        const direccion = readlineSync.question("Direccion de la Sucursal: ");
+        miSucursales.alta(nombre, direccion);
+        break;
+      case 2:
+        const idSucursal = readlineSync.questionInt(
+          "ID de la Sucursal a modificar: "
+        );
+        const nombreSucursal = readlineSync.question(
+          "Nuevo nombre de la Sucursal: "
+        );
+        const direccionSucursal = readlineSync.question(
+          "Nueva direccion de la Sucursal: "
+        );
+        miSucursales.modificarDatos(
+          idSucursal,
+          nombreSucursal,
+          direccionSucursal
+        );
+        break;
+      case 3:
+        const idSucursales = readlineSync.questionInt(
+          "ID de la Sucursal a eliminar: "
+        );
+        miSucursales.baja(idSucursales);
+        break;
+      case 4:
+        miSucursales.mostrarVeterinarias();
+        break;
+      case 5:
+        console.log("Volviendo al menú principal...");
+        break;
+      default:
+        console.log("Opción inválida.");
+    }
+  } while (opcion !== 5);
+}
+
+let opcionPrincipal: number;
+do {
+  mostrarMenu();
+  opcionPrincipal = readlineSync.questionInt("Seleccione una opción: ");
+
+  switch (opcionPrincipal) {
+    case 1:
+      gestionMascotas();
+      break;
+    case 2:
+      gestionProveedores();
+      break;
+    case 3:
+      gestionClientes();
+      break;
+    case 4:
+      gestionSucursales();
+    case 5:
+      console.log("Saliendo del sistema...");
+      break;
+    default:
+      console.log("Opción inválida.");
+  }
+} while (opcionPrincipal !== 5);
+
+// Mensaje final al salir
+console.log("Gracias por usar el sistema de gestión veterinaria.");
+console.log("Recuerde guardar los cambios si es necesario.");
+console.log("¡Hasta pronto!");

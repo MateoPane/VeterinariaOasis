@@ -1,86 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Veterinaria = void 0;
-var Veterinaria = /** @class */ (function () {
-    function Veterinaria() {
-<<<<<<< HEAD
-        this.clientes = [];
-        this.idCounter = 1;
-    }
-    // Función para agregar un nuevo cliente
-    Veterinaria.prototype.agregarCliente = function (nombre, telefono) {
-        var nuevoCliente = {
-            id: this.idCounter++,
-            nombre: nombre,
-            telefono: telefono,
-            esVIP: false,
-            visitas: 0,
-        };
-        this.clientes.push(nuevoCliente);
-        return nuevoCliente;
-    };
-    // Función para eliminar un cliente por ID
-    Veterinaria.prototype.eliminarCliente = function (id) {
-        var index = this.clientes.findIndex(function (cliente) { return cliente.id === id; });
-        if (index !== -1) {
-            this.clientes.splice(index, 1);
-            return true;
-        }
-        return false;
-    };
-    // Función para modificar datos de un cliente
-    Veterinaria.prototype.modificarCliente = function (id, nombre, telefono) {
-        var cliente = this.clientes.find(function (cliente) { return cliente.id === id; });
-        if (cliente) {
-            if (nombre)
-                cliente.nombre = nombre;
-            if (telefono)
-                cliente.telefono = telefono;
-            return true;
-        }
-        return false;
-    };
-    // Función para registrar una visita y actualizar el estado VIP
-    Veterinaria.prototype.registrarVisita = function (id) {
-        var cliente = this.clientes.find(function (cliente) { return cliente.id === id; });
-        if (cliente) {
-            cliente.visitas += 1;
-            if (cliente.visitas >= 5) {
-                cliente.esVIP = true;
-            }
-            return true;
-        }
-        return false;
-    };
-    // Función para listar todos los clientes
-    Veterinaria.prototype.listarClientes = function () {
-        return this.clientes;
-=======
+class Veterinaria {
+    constructor() {
         this.mascotas = [];
     }
-    Veterinaria.prototype.alta = function (mascotas) {
+    alta(mascotas) {
+        const idExistente = this.mascotas.find((mascota) => mascota.id === mascotas.id);
+        const idDuenioExistente = this.mascotas.find((mascota) => mascota.idDuenio === mascotas.idDuenio);
+        if (idExistente) {
+            console.log(`Ya existe una Mascota con este id ${mascotas.id}`);
+            return;
+        }
+        else if (idDuenioExistente) {
+            console.log(`El Dueño con Id ${mascotas.idDuenio} ya tiene una mascota registrada.`);
+            return;
+        }
         this.mascotas.push(mascotas);
-        console.log("Mascota agregada: ".concat(mascotas.datosAnimal()));
-    };
-    Veterinaria.prototype.baja = function (id) {
-        var index = -1;
-        for (var i = 0; i < this.mascotas.length; i++) {
+        console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
+    }
+    baja(id) {
+        let index = -1;
+        for (let i = 0; i < this.mascotas.length; i++) {
             if (this.mascotas[i].id === id) {
                 index = i;
                 break;
             }
         }
         if (index !== -1) {
-            var mascotaEliminada = this.mascotas.splice(index, 1)[0];
-            console.log("Mascota eliminada: ".concat(mascotaEliminada.datosAnimal()));
+            const mascotaEliminada = this.mascotas.splice(index, 1)[0];
+            console.log(`Mascota eliminada: ${mascotaEliminada.datosAnimal()}`);
         }
         else {
             console.log("Mascota no encontrada para eliminar");
         }
-    };
-    Veterinaria.prototype.modificarMasc = function (id, idDuenioNuevo, nombreNuevo, especieNuevo) {
-        var mascotaAModificar;
-        this.mascotas.forEach(function (mascota) {
+    }
+    modificarMasc(id, idDuenioNuevo, nombreNuevo, especieNuevo) {
+        let mascotaAModificar;
+        this.mascotas.forEach((mascota) => {
             if (mascota.id === id) {
                 mascotaAModificar = mascota;
             }
@@ -89,17 +46,15 @@ var Veterinaria = /** @class */ (function () {
             mascotaAModificar.idDuenio = idDuenioNuevo;
             mascotaAModificar.nombre = nombreNuevo;
             mascotaAModificar.especie = especieNuevo;
-            console.log("Mascota modificada: ".concat(mascotaAModificar.datosAnimal()));
+            console.log(`Mascota modificada: ${mascotaAModificar.datosAnimal()}`);
         }
         else {
             console.log("No se encontro la mascota");
         }
-    };
-    Veterinaria.prototype.listMasc = function () {
+    }
+    listMasc() {
         console.log("Listado de mascotas:");
-        this.mascotas.forEach(function (mascota) { return console.log(mascota.datosAnimal()); });
->>>>>>> b2029e1d80db7ee8c148053ca251bc44cc62e4fe
-    };
-    return Veterinaria;
-}());
+        this.mascotas.forEach((mascota) => console.log(mascota.datosAnimal()));
+    }
+}
 exports.Veterinaria = Veterinaria;
