@@ -51,7 +51,7 @@ export class Sucursales {
       console.log("No hay veterinarias registradas.");
       return;
     }
-    console.log("Lista de Veterinarias:");
+    console.log("Lista de Sucursales:");
     this.veterinarias.forEach((v) => {
       console.log(
         `ID: ${v.id}, Nombre: ${v.nombre}, Dirección: ${v.direccion}`

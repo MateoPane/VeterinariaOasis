@@ -4,11 +4,11 @@ export class Mascota {
   public nombre: string;
   public especie: string;
 
-  constructor(id: number, idDuenio: number, nombre: string, especie: string) {
-    this.id = id;
+  constructor(idDuenio: number, nombre: string, especie: string) {
     this.idDuenio = idDuenio;
     this.nombre = nombre;
     this.especie = this.especieExotica(especie);
+    this.id = 0;
   }
 
   public especieExotica(especie: string): string {

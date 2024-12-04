@@ -3,6 +3,15 @@ import { Mascota } from "./Mascota";
 export class Veterinaria {
   public mascotas: Mascota[] = [];
 
+  private generarId(): number {
+    let id = Math.floor(Math.random() * 9000) + 1000;
+    // Verifica si el ID ya existe en la lista de proveedores
+    while (this.mascotas.find((mascota) => mascota.id === id)) {
+      id = Math.floor(Math.random() * 9000) + 1000; // Genera un nuevo ID si ya existe
+    }
+    return id;
+  }
+
   public alta(mascotas: Mascota): void {
     const idExistente = this.mascotas.find(
       (mascota) => mascota.id === mascotas.id
@@ -20,7 +29,8 @@ export class Veterinaria {
       );
       return;
     }
-
+    const id = this.generarId();
+    mascotas.id = id;
     this.mascotas.push(mascotas);
     console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
   }
@@ -65,6 +75,10 @@ export class Veterinaria {
   }
 
   public listMasc(): void {
+    if (this.mascotas.length === 0) {
+      console.log("No hay mascotas registradas.");
+      return;
+    }
     console.log("Listado de mascotas:");
     this.mascotas.forEach((mascota) => console.log(mascota.datosAnimal()));
   }

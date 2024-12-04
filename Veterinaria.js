@@ -5,6 +5,14 @@ class Veterinaria {
     constructor() {
         this.mascotas = [];
     }
+    generarId() {
+        let id = Math.floor(Math.random() * 9000) + 1000;
+        // Verifica si el ID ya existe en la lista de proveedores
+        while (this.mascotas.find((mascota) => mascota.id === id)) {
+            id = Math.floor(Math.random() * 9000) + 1000; // Genera un nuevo ID si ya existe
+        }
+        return id;
+    }
     alta(mascotas) {
         const idExistente = this.mascotas.find((mascota) => mascota.id === mascotas.id);
         const idDuenioExistente = this.mascotas.find((mascota) => mascota.idDuenio === mascotas.idDuenio);
@@ -16,6 +24,8 @@ class Veterinaria {
             console.log(`El Dueño con Id ${mascotas.idDuenio} ya tiene una mascota registrada.`);
             return;
         }
+        const id = this.generarId();
+        mascotas.id = id;
         this.mascotas.push(mascotas);
         console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
     }
@@ -53,6 +63,10 @@ class Veterinaria {
         }
     }
     listMasc() {
+        if (this.mascotas.length === 0) {
+            console.log("No hay mascotas registradas.");
+            return;
+        }
         console.log("Listado de mascotas:");
         this.mascotas.forEach((mascota) => console.log(mascota.datosAnimal()));
     }

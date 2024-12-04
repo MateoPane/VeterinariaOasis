@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.proveedor = void 0;
 class proveedor {
     //constructor
-    constructor(nombre, id, numeroTelefono) {
+    constructor(nombre, numeroTelefono) {
         this.nombre = nombre;
-        this.id = id;
         this.numeroTelefono = numeroTelefono;
+        this.id = 0;
     }
     //METODOS
     obtenerInformacion() {

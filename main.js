@@ -129,11 +129,10 @@ function gestionMascotas() {
         opcion = readlineSync.questionInt("Seleccione una opción: ");
         switch (opcion) {
             case 1: {
-                const id = readlineSync.questionInt("ID de la mascota: ");
                 const idDuenio = readlineSync.questionInt("ID del dueño: ");
                 const nombre = readlineSync.question("Nombre de la mascota: ");
                 const especie = readlineSync.question("Especie de la mascota: ");
-                miVeterinaria.alta(new Mascota_1.Mascota(id, idDuenio, nombre, especie));
+                miVeterinaria.alta(new Mascota_1.Mascota(idDuenio, nombre, especie));
                 break;
             }
             case 2: {
@@ -174,10 +173,9 @@ function gestionProveedores() {
         opcion = readlineSync.questionInt("Seleccione una opción: ");
         switch (opcion) {
             case 1: {
-                const id = readlineSync.questionInt("ID del proveedor: ");
                 const nombre = readlineSync.question("Nombre del proveedor: ");
                 const telefono = readlineSync.questionInt("Teléfono del proveedor: ");
-                miVetProveedores.alta(new proveedor_1.proveedor(nombre, id, telefono));
+                miVetProveedores.alta(new proveedor_1.proveedor(nombre, telefono));
                 break;
             }
             case 2: {

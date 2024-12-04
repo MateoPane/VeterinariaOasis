@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mascota = void 0;
 class Mascota {
-    constructor(id, idDuenio, nombre, especie) {
-        this.id = id;
+    constructor(idDuenio, nombre, especie) {
         this.idDuenio = idDuenio;
         this.nombre = nombre;
         this.especie = this.especieExotica(especie);
+        this.id = 0;
     }
     especieExotica(especie) {
         if (especie.toLowerCase() !== "perro" && especie.toLowerCase() !== "gato") {

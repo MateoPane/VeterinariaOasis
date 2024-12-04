@@ -5,10 +5,10 @@ export class proveedor {
   public numeroTelefono: number;
 
   //constructor
-  constructor(nombre: string, id: number, numeroTelefono: number) {
+  constructor(nombre: string, numeroTelefono: number) {
     this.nombre = nombre;
-    this.id = id;
     this.numeroTelefono = numeroTelefono;
+    this.id = 0;
   }
 
   //METODOS
