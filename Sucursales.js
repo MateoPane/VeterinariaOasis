@@ -13,7 +13,7 @@ class Sucursales {
         }
         return id;
     }
-    alta(nombre, direccion) {
+    altaSucursal(nombre, direccion) {
         const id = this.generarId();
         const nuevaVeterinaria = { id, nombre, direccion };
         this.veterinarias.push(nuevaVeterinaria);
@@ -30,7 +30,7 @@ class Sucursales {
             console.log("Veterinaria no encontrada con ese ID.");
         }
     }
-    baja(id) {
+    bajaSucursal(id) {
         const index = this.veterinarias.findIndex((v) => v.id === id);
         if (index !== -1) {
             const [eliminada] = this.veterinarias.splice(index, 1);

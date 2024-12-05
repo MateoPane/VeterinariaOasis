@@ -6,17 +6,17 @@ import { Mascota } from "./Mascota";
 import { RedClientes } from "./RedClientes";
 import { Sucursales } from "./Sucursales";
 
-const miVeterinaria = new Veterinaria();
 const miRedClientes = new RedClientes();
+const miVeterinaria = new Veterinaria(miRedClientes);
 const miVetProveedores = new vetProveedores();
 const miSucursales = new Sucursales();
 
 function mostrarMenu(): void {
   console.log(`
   === SISTEMA DE GESTIÓN ===
-  1. Gestión de Mascotas
+  1. Gestión de Clientes
   2. Gestión de Proveedores
-  3. Gestión de Clientes
+  3. Gestión de Mascotas
   4. Gestión de Sucursales
   5. Salir
   `);
@@ -109,13 +109,13 @@ function gestionMascotas(): void {
   let opcion: number;
   do {
     console.log(`
-    === GESTIÓN DE MASCOTAS ===
-    1. Agregar Mascota
-    2. Modificar Mascota
-    3. Eliminar Mascota
-    4. Listar Mascotas
-    5. Volver al Menú Principal
-    `);
+      === GESTIÓN DE MASCOTAS ===
+      1. Agregar Mascota
+      2. Modificar Mascota
+      3. Eliminar Mascota
+      4. Listar Mascotas
+      5. Volver al Menú Principal
+      `);
 
     opcion = readlineSync.questionInt("Seleccione una opción: ");
 
@@ -124,24 +124,23 @@ function gestionMascotas(): void {
         const idDuenio = readlineSync.questionInt("ID del dueño: ");
         const nombre = readlineSync.question("Nombre de la mascota: ");
         const especie = readlineSync.question("Especie de la mascota: ");
-        miVeterinaria.alta(new Mascota(idDuenio, nombre, especie));
-        break;
-      }
-      case 2: {
-        const id = readlineSync.questionInt("ID de la mascota a modificar: ");
-        const idDuenio = readlineSync.questionInt("Nuevo ID del dueño: ");
-        const nombre = readlineSync.question("Nuevo nombre: ");
-        const especie = readlineSync.question("Nueva especie: ");
-        miVeterinaria.modificarMasc(id, idDuenio, nombre, especie);
-        break;
-      }
-      case 3: {
-        const id = readlineSync.questionInt("ID de la mascota a eliminar: ");
-        miVeterinaria.baja(id);
+        const nuevaMascota = new Mascota(idDuenio, nombre, especie);
+        miVeterinaria.altaMascota(nuevaMascota, miRedClientes);
         break;
       }
       case 4:
-        miVeterinaria.listMasc();
+        console.log("Listado de mascotas:");
+        if (miVeterinaria.mascotas.length === 0) {
+          console.log("No hay mascotas registradas.");
+        } else {
+          miVeterinaria.mascotas.forEach((mascota) => {
+            const cliente = miRedClientes
+              .listarClientes()
+              .find((cliente) => cliente.id === mascota.idDuenio);
+            const clienteNombre = cliente ? cliente.nombre : "Desconocido";
+            console.log(mascota.datosAnimal(clienteNombre));
+          });
+        }
         break;
       case 5:
         console.log("Volviendo al menú principal...");
@@ -170,7 +169,7 @@ function gestionProveedores(): void {
       case 1: {
         const nombre = readlineSync.question("Nombre del proveedor: ");
         const telefono = readlineSync.questionInt("Teléfono del proveedor: ");
-        miVetProveedores.alta(new proveedor(nombre, telefono));
+        miVetProveedores.altaProveedor(new proveedor(nombre, telefono));
         break;
       }
       case 2: {
@@ -182,11 +181,11 @@ function gestionProveedores(): void {
       }
       case 3: {
         const id = readlineSync.questionInt("ID del proveedor a eliminar: ");
-        miVetProveedores.baja(id);
+        miVetProveedores.bajaProveedor(id);
         break;
       }
       case 4:
-        miVetProveedores.listaProv();
+        miVetProveedores.listaProveedores();
         break;
       case 5:
         console.log("Volviendo al menú principal...");
@@ -213,7 +212,7 @@ function gestionSucursales(): void {
       case 1:
         const nombre = readlineSync.question("Nombre de la Sucursal: ");
         const direccion = readlineSync.question("Direccion de la Sucursal: ");
-        miSucursales.alta(nombre, direccion);
+        miSucursales.altaSucursal(nombre, direccion);
         break;
       case 2:
         const idSucursal = readlineSync.questionInt(
@@ -235,7 +234,7 @@ function gestionSucursales(): void {
         const idSucursales = readlineSync.questionInt(
           "ID de la Sucursal a eliminar: "
         );
-        miSucursales.baja(idSucursales);
+        miSucursales.bajaSucursal(idSucursales);
         break;
       case 4:
         miSucursales.mostrarVeterinarias();
@@ -256,13 +255,13 @@ do {
 
   switch (opcionPrincipal) {
     case 1:
-      gestionMascotas();
+      gestionClientes();
       break;
     case 2:
       gestionProveedores();
       break;
     case 3:
-      gestionClientes();
+      gestionMascotas();
       break;
     case 4:
       gestionSucursales();

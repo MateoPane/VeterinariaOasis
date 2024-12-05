@@ -13,13 +13,13 @@ class vetProveedores {
         }
         return id;
     }
-    alta(proveedor) {
+    altaProveedor(proveedor) {
         const id = this.generarId(); // Genera un ID único aleatorio
         proveedor.id = id;
         this.proveedores.push(proveedor);
         console.log(`Proveedor agregado: ${proveedor.obtenerInformacion()}`);
     }
-    baja(id) {
+    bajaProveedor(id) {
         let indice = -1;
         for (let i = 0; i < this.proveedores.length; i++) {
             if (this.proveedores[i].id === id) {
@@ -51,7 +51,7 @@ class vetProveedores {
             console.log("No se encuentra el proveedor");
         }
     }
-    listaProv() {
+    listaProveedores() {
         if (this.proveedores.length === 0) {
             console.log("No hay proveedores registrados.");
             return;

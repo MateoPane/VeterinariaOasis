@@ -1,85 +1,110 @@
 import { Mascota } from "./Mascota";
+import { RedClientes } from "./RedClientes";
 
 export class Veterinaria {
   public mascotas: Mascota[] = [];
+  private redClientes: RedClientes;
+
+  constructor(redClientes: RedClientes) {
+    this.redClientes = redClientes;
+  }
 
   private generarId(): number {
     let id = Math.floor(Math.random() * 9000) + 1000;
-    // Verifica si el ID ya existe en la lista de proveedores
+    // Verifica si el ID ya existe en la lista de proveedores, se genera un id a partir de 1000 a 9999
     while (this.mascotas.find((mascota) => mascota.id === id)) {
       id = Math.floor(Math.random() * 9000) + 1000; // Genera un nuevo ID si ya existe
     }
     return id;
   }
 
-  public alta(mascotas: Mascota): void {
-    const idExistente = this.mascotas.find(
-      (mascota) => mascota.id === mascotas.id
-    );
-    const idDuenioExistente = this.mascotas.find(
-      (mascota) => mascota.idDuenio === mascotas.idDuenio
-    );
+  public altaMascota(mascotas: Mascota, clientes: RedClientes): void {
+    const cliente = clientes
+      .listarClientes()
+      .find((c) => c.id === mascotas.idDuenio);
 
-    if (idExistente) {
-      console.log(`Ya existe una Mascota con este id ${mascotas.id}`);
-      return;
-    } else if (idDuenioExistente) {
+    if (!cliente) {
       console.log(
-        `El Dueño con Id ${mascotas.idDuenio} ya tiene una mascota registrada.`
+        `Error: No existe un cliente con el ID ${mascotas.idDuenio}.`
       );
       return;
     }
+
+    const idExistente = this.mascotas.find(
+      (mascota) => mascota.id === mascotas.id
+    );
+    if (idExistente) {
+      console.log(`Ya existe una mascota con el ID ${mascotas.id}`);
+      return;
+    }
+
     const id = this.generarId();
     mascotas.id = id;
     this.mascotas.push(mascotas);
-    console.log(`Mascota agregada: ${mascotas.datosAnimal()}`);
+    console.log(`Mascota agregada: ${mascotas.datosAnimal(cliente.nombre)}`);
   }
 
-  public baja(id: number): void {
-    let index = -1;
-    for (let i = 0; i < this.mascotas.length; i++) {
-      if (this.mascotas[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    if (index !== -1) {
-      const mascotaEliminada = this.mascotas.splice(index, 1)[0];
-      console.log(`Mascota eliminada: ${mascotaEliminada.datosAnimal()}`);
-    } else {
-      console.log("Mascota no encontrada para eliminar");
-    }
-  }
-
-  public modificarMasc(
-    id: number,
-    idDuenioNuevo: number,
-    nombreNuevo: string,
-    especieNuevo: string
-  ): void {
-    let mascotaAModificar: Mascota | undefined;
-    this.mascotas.forEach((mascota) => {
-      if (mascota.id === id) {
-        mascotaAModificar = mascota;
-      }
-    });
-    if (mascotaAModificar) {
-      mascotaAModificar.idDuenio = idDuenioNuevo;
-      mascotaAModificar.nombre = nombreNuevo;
-      mascotaAModificar.especie = especieNuevo;
-      console.log(`Mascota modificada: ${mascotaAModificar.datosAnimal()}`);
-    } else {
-      console.log("No se encontro la mascota");
-    }
-  }
-
-  public listMasc(): void {
-    if (this.mascotas.length === 0) {
-      console.log("No hay mascotas registradas.");
+  public bajaMascota(id: number): void {
+    const mascotaEliminada = this.mascotas.find((mascota) => mascota.id === id);
+    if (!mascotaEliminada) {
+      console.log(`Mascota con ID ${id} no encontrada.`);
       return;
     }
-    console.log("Listado de mascotas:");
-    this.mascotas.forEach((mascota) => console.log(mascota.datosAnimal()));
+    this.mascotas = this.mascotas.filter((mascota) => mascota.id !== id);
+    const cliente = this.redClientes
+      .listarClientes()
+      .find((c) => c.id === mascotaEliminada.idDuenio);
+    const clienteNombre = cliente ? cliente.nombre : "Desconocido";
+    console.log(
+      `Mascota eliminada: ${mascotaEliminada.datosAnimal(clienteNombre)}`
+    );
+  }
+
+  public modificarMascota(
+    id: number,
+    idDuenio: number,
+    nombre: string,
+    especie: string
+  ): void {
+    const mascotaAModificar = this.mascotas.find(
+      (mascota) => mascota.id === id
+    );
+
+    if (!mascotaAModificar) {
+      console.log(`No se encontró una mascota con el ID ${id}.`);
+      return;
+    }
+
+    // Buscar el cliente asociado al nuevo `idDuenio`
+    const cliente = this.redClientes
+      .listarClientes()
+      .find((cliente) => cliente.id === idDuenio);
+    if (!cliente) {
+      console.log(`No se encontró un cliente con el ID ${idDuenio}.`);
+      return;
+    }
+
+    // Actualizar los datos de la mascota
+    mascotaAModificar.idDuenio = idDuenio;
+    mascotaAModificar.nombre = nombre;
+    mascotaAModificar.especie = especie;
+
+    console.log(
+      `Mascota modificada: ${mascotaAModificar.datosAnimal(cliente.nombre)}`
+    );
+  }
+
+  public listMascota(): void {
+    if (this.mascotas.length === 0) {
+      console.log("No hay mascotas registradas.");
+    } else {
+      this.mascotas.forEach((mascota) => {
+        const cliente = this.redClientes
+          .listarClientes()
+          .find((c) => c.id === mascota.idDuenio);
+        const clienteNombre = cliente ? cliente.nombre : "Desconocido";
+        console.log(mascota.datosAnimal(clienteNombre));
+      });
+    }
   }
 }

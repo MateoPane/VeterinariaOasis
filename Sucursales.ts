@@ -12,7 +12,7 @@ export class Sucursales {
     return id;
   }
 
-  public alta(nombre: string, direccion: string): void {
+  public altaSucursal(nombre: string, direccion: string): void {
     const id = this.generarId();
     const nuevaVeterinaria: Veterinaria = { id, nombre, direccion };
     this.veterinarias.push(nuevaVeterinaria);
@@ -35,7 +35,7 @@ export class Sucursales {
     }
   }
 
-  baja(id: number): void {
+  bajaSucursal(id: number): void {
     const index = this.veterinarias.findIndex((v) => v.id === id);
 
     if (index !== -1) {

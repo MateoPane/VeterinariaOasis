@@ -14,8 +14,8 @@ class Mascota {
         }
         return especie;
     }
-    datosAnimal() {
-        return `Id: ${this.id}, Nombre: ${this.nombre}, Especie: ${this.especie}, Dueño: ${this.idDuenio}`;
+    datosAnimal(clienteNombre) {
+        return `Id: ${this.id}, Nombre: ${this.nombre}, Especie: ${this.especie}, Dueño: ${clienteNombre}`;
     }
 }
 exports.Mascota = Mascota;
